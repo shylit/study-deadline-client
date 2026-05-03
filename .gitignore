@@ -1,34 +1,79 @@
-# Gradle files
+# =========================
+# Android / Gradle
+# =========================
 .gradle/
 build/
+**/build/
 
-# Local configuration file (sdk path, etc)
+# Local config
 local.properties
 
-# Log/OS Files
-*.log
+# Gradle wrapper cache
+.gradle-cache/
 
-# Android Studio generated files and folders
-captures/
-.externalNativeBuild/
-.cxx/
-*.aab
-*.apk
-output-metadata.json
-
-# IntelliJ
-*.iml
+# =========================
+# Android Studio / IntelliJ
+# =========================
 .idea/
-misc.xml
+*.iml
+
+# Specific IDE files
 deploymentTargetDropDown.xml
 render.experimental.xml
+misc.xml
 
-# Keystore files
+# =========================
+# macOS
+# =========================
+.DS_Store
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Generated APK / AAB
+# =========================
+*.apk
+*.aab
+output-metadata.json
+
+# =========================
+# Native build
+# =========================
+.externalNativeBuild/
+.cxx/
+
+# =========================
+# Profiling
+# =========================
+*.hprof
+
+# =========================
+# Keystore / Signing
+# =========================
 *.jks
 *.keystore
 
-# Google Services (e.g. APIs or Firebase)
+# =========================
+# Firebase / Google Services
+# =========================
 google-services.json
 
-# Android Profiling
-*.hprof
+# =========================
+# Captures
+# =========================
+captures/
+
+# =========================
+# Kotlin
+# =========================
+.kotlin/
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.swp
+*~
