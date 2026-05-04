@@ -9,6 +9,8 @@ import ru.mirea.shylit.studydeadline.data.repositories.TaskRepositoryImpl
 import ru.mirea.shylit.studydeadline.domain.repositories.SubjectRepository
 import ru.mirea.shylit.studydeadline.domain.repositories.TaskRepository
 import javax.inject.Singleton
+import ru.mirea.shylit.studydeadline.data.repositories.SearchHistoryRepositoryImpl
+import ru.mirea.shylit.studydeadline.domain.repositories.SearchHistoryRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -25,4 +27,10 @@ abstract class RepositoryModule {
     abstract fun bindTaskRepository(
         impl: TaskRepositoryImpl
     ): TaskRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSearchHistoryRepository(
+        impl: SearchHistoryRepositoryImpl
+    ): SearchHistoryRepository
 }
