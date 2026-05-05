@@ -1,6 +1,7 @@
 package ru.mirea.shylit.studydeadline.core.navigation
 
 sealed class Screen(val route: String) {
+    data object Splash : Screen("splash")
     data object Login : Screen("login")
     data object Register : Screen("register")
 

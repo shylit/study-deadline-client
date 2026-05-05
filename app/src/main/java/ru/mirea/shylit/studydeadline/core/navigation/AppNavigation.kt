@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import ru.mirea.shylit.studydeadline.presentation.auth.login.LoginScreen
 import ru.mirea.shylit.studydeadline.presentation.auth.register.RegisterScreen
 import ru.mirea.shylit.studydeadline.presentation.main.MainScreen
+import ru.mirea.shylit.studydeadline.presentation.splash.SplashScreen
 
 @Composable
 fun AppNavigation() {
@@ -14,8 +15,27 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route
+        startDestination = Screen.Splash.route
     ) {
+        composable(Screen.Splash.route) {
+            SplashScreen(
+                onAuthorized = {
+                    navController.navigate("main") {
+                        popUpTo(Screen.Splash.route) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onUnauthorized = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.Splash.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+
         composable(Screen.Login.route) {
             LoginScreen(
                 onLoginClick = {
