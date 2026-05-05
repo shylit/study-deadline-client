@@ -23,6 +23,8 @@ datastore = "1.1.1"
 firebaseBom = "34.10.0"
 googleServices = "4.4.4"
 
+playServicesTasks = "18.2.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
@@ -65,6 +67,8 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+
+play-services-tasks = { group = "com.google.android.gms", name = "play-services-tasks", version.ref = "playServicesTasks" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -11,6 +11,8 @@ import ru.mirea.shylit.studydeadline.domain.repositories.TaskRepository
 import javax.inject.Singleton
 import ru.mirea.shylit.studydeadline.data.repositories.SearchHistoryRepositoryImpl
 import ru.mirea.shylit.studydeadline.domain.repositories.SearchHistoryRepository
+import ru.mirea.shylit.studydeadline.data.repositories.AuthRepositoryImpl
+import ru.mirea.shylit.studydeadline.domain.repositories.AuthRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -33,4 +35,10 @@ abstract class RepositoryModule {
     abstract fun bindSearchHistoryRepository(
         impl: SearchHistoryRepositoryImpl
     ): SearchHistoryRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(
+        impl: AuthRepositoryImpl
+    ): AuthRepository
 }
