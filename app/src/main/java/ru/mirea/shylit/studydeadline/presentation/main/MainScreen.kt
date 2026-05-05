@@ -20,7 +20,11 @@ import ru.mirea.shylit.studydeadline.presentation.today.TodayScreen
 import ru.mirea.shylit.studydeadline.presentation.week.WeekScreen
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+
+    onLogoutClick: () -> Unit
+
+) {
     val navController = rememberNavController()
 
     val bottomItems = listOf(
@@ -93,7 +97,11 @@ fun MainScreen() {
                 SearchScreen()
             }
             composable(Screen.Settings.route) {
-                SettingsScreen()
+                SettingsScreen(
+
+                    onLogoutClick = onLogoutClick
+
+                )
             }
         }
     }

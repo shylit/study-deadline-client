@@ -67,7 +67,25 @@ fun AppNavigation() {
         }
 
         composable("main") {
-            MainScreen()
+
+            MainScreen(
+
+                onLogoutClick = {
+
+                    navController.navigate(Screen.Login.route) {
+
+                        popUpTo("main") {
+
+                            inclusive = true
+
+                        }
+
+                    }
+
+                }
+
+            )
+
         }
     }
 }
