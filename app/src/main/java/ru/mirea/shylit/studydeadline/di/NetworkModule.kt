@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.mirea.shylit.studydeadline.data.remote.AuthInterceptor
 import ru.mirea.shylit.studydeadline.data.remote.api.SubjectApi
 import ru.mirea.shylit.studydeadline.data.remote.api.TaskApi
 import javax.inject.Singleton
@@ -18,7 +19,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "http://10.0.2.2:8080/"
+    private const val BASE_URL = "http://10.0.2.2:8080/api/"
 
     @Provides
     @Singleton
@@ -28,12 +29,16 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor
+    ): OkHttpClient {
+
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
         return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
     }
@@ -53,13 +58,17 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideSubjectApi(retrofit: Retrofit): SubjectApi {
+    fun provideSubjectApi(
+        retrofit: Retrofit
+    ): SubjectApi {
         return retrofit.create(SubjectApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideTaskApi(retrofit: Retrofit): TaskApi {
+    fun provideTaskApi(
+        retrofit: Retrofit
+    ): TaskApi {
         return retrofit.create(TaskApi::class.java)
     }
 }
