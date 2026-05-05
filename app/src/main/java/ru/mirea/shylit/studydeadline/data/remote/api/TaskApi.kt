@@ -18,6 +18,9 @@ interface TaskApi {
     @GET("tasks")
     suspend fun getTasks(): List<TaskDto>
 
+    @GET("tasks/today")
+    suspend fun getTodayTasks(): List<TaskDto>
+
     @GET("subjects/{subjectId}/tasks")
     suspend fun getTasksBySubject(
         @Path("subjectId") subjectId: String
