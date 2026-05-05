@@ -13,6 +13,8 @@ import ru.mirea.shylit.studydeadline.data.repositories.SearchHistoryRepositoryIm
 import ru.mirea.shylit.studydeadline.domain.repositories.SearchHistoryRepository
 import ru.mirea.shylit.studydeadline.data.repositories.AuthRepositoryImpl
 import ru.mirea.shylit.studydeadline.domain.repositories.AuthRepository
+import ru.mirea.shylit.studydeadline.data.repositories.ThemeRepositoryImpl
+import ru.mirea.shylit.studydeadline.domain.repositories.ThemeRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -41,4 +43,10 @@ abstract class RepositoryModule {
     abstract fun bindAuthRepository(
         impl: AuthRepositoryImpl
     ): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindThemeRepository(
+        impl: ThemeRepositoryImpl
+    ): ThemeRepository
 }

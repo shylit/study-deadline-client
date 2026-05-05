@@ -14,6 +14,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import ru.mirea.shylit.studydeadline.ui.theme.StudyDeadlineTheme
 import dagger.hilt.android.AndroidEntryPoint
 import ru.mirea.shylit.studydeadline.core.navigation.AppNavigation
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import ru.mirea.shylit.studydeadline.presentation.settings.ThemeViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -21,10 +25,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            StudyDeadlineTheme {
+            val themeViewModel: ThemeViewModel = hiltViewModel()
+            val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
 
+            StudyDeadlineTheme(
+                darkTheme = isDarkTheme
+            ) {
                 AppNavigation()
-
             }
         }
     }
