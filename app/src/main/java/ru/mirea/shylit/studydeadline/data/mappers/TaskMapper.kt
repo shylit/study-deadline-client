@@ -9,16 +9,14 @@ import ru.mirea.shylit.studydeadline.data.local.entities.TaskEntity
 
 fun TaskDto.toDomain(): StudyTask {
     return StudyTask(
-        id = id,
-        subjectId = subjectId,
+        id = id.toString(),
+        subjectId = subject,
         title = title,
         description = description,
         deadline = deadline,
         type = type.toTaskType(),
         priority = priority.toTaskPriority(),
-        status = status.toTaskStatus(),
-        createdAt = createdAt,
-        updatedAt = updatedAt
+        status = status.toTaskStatus()
     )
 }
 
@@ -29,11 +27,15 @@ fun TaskPriority.toApiValue(): String = name
 fun TaskStatus.toApiValue(): String = name
 
 private fun String.toTaskType(): TaskType {
-    return runCatching {
-        TaskType.valueOf(this)
-    }.getOrDefault(TaskType.OTHER)
+    return when (this) {
+        "LAB" -> TaskType.LAB
+        "HOMEWORK" -> TaskType.HOMEWORK
+        "PRACTICE" -> TaskType.PRACTICE
+        "COURSE_WORK", "COURSEWORK" -> TaskType.COURSEWORK
+        "EXAM" -> TaskType.EXAM
+        else -> TaskType.OTHER
+    }
 }
-
 private fun String.toTaskPriority(): TaskPriority {
     return runCatching {
         TaskPriority.valueOf(this)

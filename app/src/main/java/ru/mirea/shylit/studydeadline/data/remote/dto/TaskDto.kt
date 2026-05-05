@@ -1,14 +1,12 @@
 package ru.mirea.shylit.studydeadline.data.remote.dto
 
 data class TaskDto(
-    val id: String,
-    val subjectId: String,
+    val id: Int,
     val title: String,
     val description: String? = null,
+    val subject: String,
     val deadline: String? = null,
-    val type: String,
-    val priority: String,
     val status: String,
-    val createdAt: String? = null,
-    val updatedAt: String? = null
+    val priority: String,
+    val type: String
 )
