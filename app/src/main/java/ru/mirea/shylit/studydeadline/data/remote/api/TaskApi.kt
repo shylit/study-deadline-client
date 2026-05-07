@@ -48,7 +48,7 @@ interface TaskApi {
         @Path("id") id: String
     )
 
-    @GET("tasks/search")
+    @GET("tasks")
     suspend fun searchTasks(
         @Query("query") query: String
     ): List<TaskDto>
