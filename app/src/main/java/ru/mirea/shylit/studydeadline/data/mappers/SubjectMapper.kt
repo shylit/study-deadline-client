@@ -6,11 +6,11 @@ import ru.mirea.shylit.studydeadline.data.local.entities.SubjectEntity
 
 fun SubjectDto.toDomain(): Subject {
     return Subject(
-        id = id,
+        id = id.toString(),
         name = name,
-        color = color,
-        createdAt = createdAt,
-        updatedAt = updatedAt
+        color = null,
+        createdAt = null,
+        updatedAt = null
     )
 }
 
