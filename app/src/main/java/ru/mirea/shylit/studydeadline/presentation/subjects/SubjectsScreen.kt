@@ -1,5 +1,6 @@
 package ru.mirea.shylit.studydeadline.presentation.subjects
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +34,7 @@ import ru.mirea.shylit.studydeadline.domain.models.Subject
 
 @Composable
 fun SubjectsScreen(
+    onSubjectClick: (String) -> Unit,
     viewModel: SubjectsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -58,6 +60,7 @@ fun SubjectsScreen(
     ) { paddingValues ->
         SubjectsContent(
             uiState = uiState,
+            onSubjectClick = onSubjectClick,
             modifier = Modifier.padding(paddingValues)
         )
     }
@@ -75,6 +78,7 @@ fun SubjectsScreen(
 @Composable
 private fun SubjectsContent(
     uiState: SubjectsUiState,
+    onSubjectClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when {
@@ -118,7 +122,12 @@ private fun SubjectsContent(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(uiState.subjects) { subject ->
-                    SubjectCard(subject = subject)
+                    SubjectCard(
+                        subject = subject,
+                        onClick = {
+                            onSubjectClick(subject.name)
+                        }
+                    )
                 }
             }
         }
@@ -127,10 +136,15 @@ private fun SubjectsContent(
 
 @Composable
 private fun SubjectCard(
-    subject: Subject
+    subject: Subject,
+    onClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

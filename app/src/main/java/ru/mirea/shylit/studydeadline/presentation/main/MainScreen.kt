@@ -16,14 +16,13 @@ import ru.mirea.shylit.studydeadline.core.navigation.Screen
 import ru.mirea.shylit.studydeadline.presentation.search.SearchScreen
 import ru.mirea.shylit.studydeadline.presentation.settings.SettingsScreen
 import ru.mirea.shylit.studydeadline.presentation.subjects.SubjectsScreen
+import ru.mirea.shylit.studydeadline.presentation.tasks.SubjectTasksScreen
 import ru.mirea.shylit.studydeadline.presentation.today.TodayScreen
 import ru.mirea.shylit.studydeadline.presentation.week.WeekScreen
 
 @Composable
 fun MainScreen(
-
     onLogoutClick: () -> Unit
-
 ) {
     val navController = rememberNavController()
 
@@ -87,20 +86,39 @@ fun MainScreen(
             composable(Screen.Today.route) {
                 TodayScreen()
             }
+
             composable(Screen.Week.route) {
                 WeekScreen()
             }
+
             composable(Screen.Subjects.route) {
-                SubjectsScreen()
+                SubjectsScreen(
+                    onSubjectClick = { subjectName ->
+                        navController.navigate("subject_tasks/$subjectName")
+                    }
+                )
             }
+
+            composable("subject_tasks/{subjectName}") { backStackEntry ->
+                val subjectName = backStackEntry.arguments
+                    ?.getString("subjectName")
+                    .orEmpty()
+
+                SubjectTasksScreen(
+                    subjectName = subjectName,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
             composable(Screen.Search.route) {
                 SearchScreen()
             }
+
             composable(Screen.Settings.route) {
                 SettingsScreen(
-
                     onLogoutClick = onLogoutClick
-
                 )
             }
         }

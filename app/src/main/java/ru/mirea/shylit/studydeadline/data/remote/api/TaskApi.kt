@@ -52,4 +52,9 @@ interface TaskApi {
     suspend fun searchTasks(
         @Query("query") query: String
     ): List<TaskDto>
+
+    @GET("tasks/by-subject")
+    suspend fun getTasksBySubjectName(
+        @Query("subject") subject: String
+    ): List<TaskDto>
 }

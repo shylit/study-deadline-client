@@ -10,4 +10,6 @@ sealed class Screen(val route: String) {
     data object Subjects : Screen("subjects")
     data object Search : Screen("search")
     data object Settings : Screen("settings")
+
+    data object SubjectTasks : Screen("subject_tasks/{subjectName}")
 }

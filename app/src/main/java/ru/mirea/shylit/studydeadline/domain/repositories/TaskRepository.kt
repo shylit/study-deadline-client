@@ -45,4 +45,6 @@ interface TaskRepository {
     suspend fun searchTasks(query: String): Result<List<StudyTask>>
 
     suspend fun refreshTodayTasks()
+
+    suspend fun refreshTasksBySubject(subjectName: String)
 }

@@ -132,4 +132,11 @@ class TaskRepositoryImpl @Inject constructor(
 
         taskDao.insertTasks(remoteTasks.map { it.toEntity() })
     }
+
+    override suspend fun refreshTasksBySubject(subjectName: String) {
+        val remoteTasks = taskApi.getTasksBySubjectName(subjectName)
+            .map { it.toDomain() }
+
+        taskDao.insertTasks(remoteTasks.map { it.toEntity() })
+    }
 }
