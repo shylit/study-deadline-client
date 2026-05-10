@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mirea.shylit.studydeadline.domain.models.StudyTask
+import ru.mirea.shylit.studydeadline.core.ui.toRuLabel
 
 @Composable
 fun SearchScreen(

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mirea.shylit.studydeadline.domain.models.TaskPriority
 import ru.mirea.shylit.studydeadline.domain.models.TaskType
+import ru.mirea.shylit.studydeadline.core.ui.toRuLabel
 
 @Composable
 fun CreateTaskScreen(
@@ -109,9 +110,9 @@ fun CreateTaskScreen(
             ) {
                 Text(
                     text = if (uiState.priority == priority) {
-                        "✓ ${priority.name}"
+                        "✓ ${priority.toRuLabel()}"
                     } else {
-                        priority.name
+                        priority.toRuLabel()
                     }
                 )
             }
@@ -131,9 +132,9 @@ fun CreateTaskScreen(
             ) {
                 Text(
                     text = if (uiState.type == type) {
-                        "✓ ${type.name}"
+                        "✓ ${type.toRuLabel()}"
                     } else {
-                        type.name
+                        type.toRuLabel()
                     }
                 )
             }

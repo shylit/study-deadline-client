@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mirea.shylit.studydeadline.domain.models.StudyTask
 import androidx.compose.material3.TextButton
 import ru.mirea.shylit.studydeadline.domain.models.TaskStatus
+import ru.mirea.shylit.studydeadline.core.ui.toRuLabel
 
 @Composable
 fun SubjectTasksScreen(
@@ -153,13 +154,13 @@ private fun SubjectTaskCard(
             )
 
             Text(
-                text = "Приоритет: ${task.priority}",
+                text = "Приоритет: ${task.priority.toRuLabel()}",
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp)
             )
 
             Text(
-                text = "Статус: ${task.status}",
+                text = "Статус: ${task.status.toRuLabel()}",
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp)
             )
