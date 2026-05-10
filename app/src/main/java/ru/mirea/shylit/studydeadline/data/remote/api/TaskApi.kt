@@ -12,6 +12,7 @@ import ru.mirea.shylit.studydeadline.data.remote.dto.CreateTaskRequest
 import ru.mirea.shylit.studydeadline.data.remote.dto.TaskDto
 import ru.mirea.shylit.studydeadline.data.remote.dto.UpdateTaskRequest
 import ru.mirea.shylit.studydeadline.data.remote.dto.UpdateTaskStatusRequest
+import ru.mirea.shylit.studydeadline.data.remote.dto.MessageResponse
 
 interface TaskApi {
 
@@ -45,7 +46,7 @@ interface TaskApi {
     @DELETE("tasks/{id}")
     suspend fun deleteTask(
         @Path("id") id: String
-    )
+    ): MessageResponse
 
     @GET("tasks")
     suspend fun searchTasks(

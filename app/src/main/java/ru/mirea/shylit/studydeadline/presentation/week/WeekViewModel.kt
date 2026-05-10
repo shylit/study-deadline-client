@@ -15,11 +15,13 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import javax.inject.Inject
 import ru.mirea.shylit.studydeadline.domain.usecases.tasks.UpdateTaskStatusUseCase
+import ru.mirea.shylit.studydeadline.domain.usecases.tasks.DeleteTaskUseCase
 
 @HiltViewModel
 class WeekViewModel @Inject constructor(
     getTasksUseCase: GetTasksUseCase,
     private val updateTaskStatusUseCase: UpdateTaskStatusUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
     private val refreshTasksUseCase: RefreshTasksUseCase
 ) : ViewModel() {
 
@@ -103,6 +105,13 @@ class WeekViewModel @Inject constructor(
                 status = TaskStatus.COMPLETED
             )
 
+            refreshTasks()
+        }
+    }
+
+    fun deleteTask(taskId: String) {
+        viewModelScope.launch {
+            deleteTaskUseCase(taskId)
             refreshTasks()
         }
     }

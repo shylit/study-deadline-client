@@ -14,11 +14,13 @@ import ru.mirea.shylit.studydeadline.domain.usecases.tasks.RefreshTasksUseCase
 import java.time.LocalDate
 import javax.inject.Inject
 import ru.mirea.shylit.studydeadline.domain.usecases.tasks.UpdateTaskStatusUseCase
+import ru.mirea.shylit.studydeadline.domain.usecases.tasks.DeleteTaskUseCase
 
 @HiltViewModel
 class TodayViewModel @Inject constructor(
     getTasksUseCase: GetTasksUseCase,
     private val refreshTasksUseCase: RefreshTasksUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
     private val updateTaskStatusUseCase: UpdateTaskStatusUseCase
 ) : ViewModel() {
 
@@ -83,6 +85,13 @@ class TodayViewModel @Inject constructor(
                 status = TaskStatus.COMPLETED
             )
 
+            refreshTodayTasks()
+        }
+    }
+
+    fun deleteTask(taskId: String) {
+        viewModelScope.launch {
+            deleteTaskUseCase(taskId)
             refreshTodayTasks()
         }
     }

@@ -109,6 +109,9 @@ fun WeekScreen(
                             task = task,
                             onMarkCompletedClick = {
                                 viewModel.markTaskCompleted(task.id)
+                            },
+                            onDeleteClick = {
+                                viewModel.deleteTask(task.id)
                             }
                         )
                     }
@@ -128,6 +131,9 @@ fun WeekScreen(
                             task = task,
                             onMarkCompletedClick = {
                                 viewModel.markTaskCompleted(task.id)
+                            },
+                            onDeleteClick = {
+                                viewModel.deleteTask(task.id)
                             }
                         )
                     }
@@ -140,7 +146,8 @@ fun WeekScreen(
 @Composable
 private fun WeekTaskCard(
     task: StudyTask,
-    onMarkCompletedClick: () -> Unit
+    onMarkCompletedClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -193,6 +200,13 @@ private fun WeekTaskCard(
             ) {
                 Text("Отметить выполненной")
             }
+        }
+
+        TextButton(
+            onClick = onDeleteClick,
+            modifier = Modifier.padding(top = 4.dp)
+        ) {
+            Text("Удалить")
         }
     }
 }

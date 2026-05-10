@@ -112,8 +112,11 @@ class TaskRepositoryImpl @Inject constructor(
 
     override suspend fun deleteTask(id: String): Result<Unit> {
         return runCatching {
-            taskApi.deleteTask(id)
-            taskDao.deleteTask(id)
+            try {
+                taskApi.deleteTask(id)
+            } finally {
+                taskDao.deleteTask(id)
+            }
         }
     }
 

@@ -127,6 +127,9 @@ fun TodayScreen(
                                 task = task,
                                 onMarkCompletedClick = {
                                     viewModel.markTaskCompleted(task.id)
+                                },
+                                onDeleteClick = {
+                                    viewModel.deleteTask(task.id)
                                 }
                             )
                         }
@@ -146,6 +149,9 @@ fun TodayScreen(
                                 task = task,
                                 onMarkCompletedClick = {
                                     viewModel.markTaskCompleted(task.id)
+                                },
+                                onDeleteClick = {
+                                    viewModel.deleteTask(task.id)
                                 }
                             )
                         }
@@ -159,7 +165,8 @@ fun TodayScreen(
 @Composable
 private fun TodayTaskCard(
     task: StudyTask,
-    onMarkCompletedClick: () -> Unit
+    onMarkCompletedClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -211,6 +218,12 @@ private fun TodayTaskCard(
             ) {
                 Text("Отметить выполненной")
             }
+        }
+        TextButton(
+            onClick = onDeleteClick,
+            modifier = Modifier.padding(top = 4.dp)
+        ) {
+            Text("Удалить")
         }
     }
 }
