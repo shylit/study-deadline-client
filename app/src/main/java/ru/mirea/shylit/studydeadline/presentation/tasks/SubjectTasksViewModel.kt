@@ -11,10 +11,13 @@ import kotlinx.coroutines.launch
 import ru.mirea.shylit.studydeadline.domain.usecases.tasks.GetTasksUseCase
 import ru.mirea.shylit.studydeadline.domain.usecases.tasks.RefreshTasksBySubjectUseCase
 import javax.inject.Inject
+import ru.mirea.shylit.studydeadline.domain.models.TaskStatus
+import ru.mirea.shylit.studydeadline.domain.usecases.tasks.UpdateTaskStatusUseCase
 
 @HiltViewModel
 class SubjectTasksViewModel @Inject constructor(
     getTasksUseCase: GetTasksUseCase,
+    private val updateTaskStatusUseCase: UpdateTaskStatusUseCase,
     private val refreshTasksBySubjectUseCase: RefreshTasksBySubjectUseCase
 ) : ViewModel() {
 
@@ -51,6 +54,19 @@ class SubjectTasksViewModel @Inject constructor(
             }
 
             localState.value = localState.value.copy(isLoading = false)
+        }
+    }
+
+    fun markTaskCompleted(taskId: String) {
+        val subjectName = uiState.value.subjectName
+
+        viewModelScope.launch {
+            updateTaskStatusUseCase(
+                id = taskId,
+                status = TaskStatus.COMPLETED
+            )
+
+            loadSubject(subjectName)
         }
     }
 }

@@ -14,10 +14,12 @@ import ru.mirea.shylit.studydeadline.domain.usecases.tasks.RefreshTasksUseCase
 import java.time.DayOfWeek
 import java.time.LocalDate
 import javax.inject.Inject
+import ru.mirea.shylit.studydeadline.domain.usecases.tasks.UpdateTaskStatusUseCase
 
 @HiltViewModel
 class WeekViewModel @Inject constructor(
     getTasksUseCase: GetTasksUseCase,
+    private val updateTaskStatusUseCase: UpdateTaskStatusUseCase,
     private val refreshTasksUseCase: RefreshTasksUseCase
 ) : ViewModel() {
 
@@ -91,6 +93,17 @@ class WeekViewModel @Inject constructor(
             DayOfWeek.FRIDAY -> "Пятница"
             DayOfWeek.SATURDAY -> "Суббота"
             DayOfWeek.SUNDAY -> "Воскресенье"
+        }
+    }
+
+    fun markTaskCompleted(taskId: String) {
+        viewModelScope.launch {
+            updateTaskStatusUseCase(
+                id = taskId,
+                status = TaskStatus.COMPLETED
+            )
+
+            refreshTasks()
         }
     }
 }

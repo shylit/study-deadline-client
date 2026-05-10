@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mirea.shylit.studydeadline.domain.models.StudyTask
+import androidx.compose.material3.TextButton
+import ru.mirea.shylit.studydeadline.domain.models.TaskStatus
 
 @Composable
 fun WeekScreen(
@@ -103,7 +105,12 @@ fun WeekScreen(
                     }
 
                     items(tasks) { task ->
-                        WeekTaskCard(task = task)
+                        WeekTaskCard(
+                            task = task,
+                            onMarkCompletedClick = {
+                                viewModel.markTaskCompleted(task.id)
+                            }
+                        )
                     }
                 }
 
@@ -117,7 +124,12 @@ fun WeekScreen(
                     }
 
                     items(uiState.tasksWithoutDeadline) { task ->
-                        WeekTaskCard(task = task)
+                        WeekTaskCard(
+                            task = task,
+                            onMarkCompletedClick = {
+                                viewModel.markTaskCompleted(task.id)
+                            }
+                        )
                     }
                 }
             }
@@ -127,7 +139,8 @@ fun WeekScreen(
 
 @Composable
 private fun WeekTaskCard(
-    task: StudyTask
+    task: StudyTask,
+    onMarkCompletedClick: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -171,6 +184,15 @@ private fun WeekTaskCard(
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp)
             )
+        }
+
+        if (task.status != TaskStatus.COMPLETED) {
+            TextButton(
+                onClick = onMarkCompletedClick,
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text("Отметить выполненной")
+            }
         }
     }
 }

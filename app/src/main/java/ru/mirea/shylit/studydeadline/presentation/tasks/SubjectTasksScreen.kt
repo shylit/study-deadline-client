@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mirea.shylit.studydeadline.domain.models.StudyTask
+import androidx.compose.material3.TextButton
+import ru.mirea.shylit.studydeadline.domain.models.TaskStatus
 
 @Composable
 fun SubjectTasksScreen(
@@ -103,7 +105,12 @@ fun SubjectTasksScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(uiState.tasks) { task ->
-                        SubjectTaskCard(task = task)
+                        SubjectTaskCard(
+                            task = task,
+                            onMarkCompletedClick = {
+                                viewModel.markTaskCompleted(task.id)
+                            }
+                        )
                     }
                 }
             }
@@ -113,7 +120,8 @@ fun SubjectTasksScreen(
 
 @Composable
 private fun SubjectTaskCard(
-    task: StudyTask
+    task: StudyTask,
+    onMarkCompletedClick: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -151,6 +159,15 @@ private fun SubjectTaskCard(
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp)
             )
+        }
+
+        if (task.status != TaskStatus.COMPLETED) {
+            TextButton(
+                onClick = onMarkCompletedClick,
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text("Отметить выполненной")
+            }
         }
     }
 }
