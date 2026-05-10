@@ -42,7 +42,6 @@ interface TaskApi {
         @Path("id") id: String,
         @Body request: UpdateTaskStatusRequest
     ): TaskDto
-
     @DELETE("tasks/{id}")
     suspend fun deleteTask(
         @Path("id") id: String

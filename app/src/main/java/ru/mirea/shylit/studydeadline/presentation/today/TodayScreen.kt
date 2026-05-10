@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mirea.shylit.studydeadline.domain.models.StudyTask
+import ru.mirea.shylit.studydeadline.domain.models.TaskStatus
 
 @Composable
 fun TodayScreen(
@@ -122,7 +123,12 @@ fun TodayScreen(
                         }
 
                         items(uiState.overdueTasks) { task ->
-                            TodayTaskCard(task = task)
+                            TodayTaskCard(
+                                task = task,
+                                onMarkCompletedClick = {
+                                    viewModel.markTaskCompleted(task.id)
+                                }
+                            )
                         }
                     }
 
@@ -136,7 +142,12 @@ fun TodayScreen(
                         }
 
                         items(uiState.todayTasks) { task ->
-                            TodayTaskCard(task = task)
+                            TodayTaskCard(
+                                task = task,
+                                onMarkCompletedClick = {
+                                    viewModel.markTaskCompleted(task.id)
+                                }
+                            )
                         }
                     }
                 }
@@ -147,7 +158,8 @@ fun TodayScreen(
 
 @Composable
 private fun TodayTaskCard(
-    task: StudyTask
+    task: StudyTask,
+    onMarkCompletedClick: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -191,6 +203,14 @@ private fun TodayTaskCard(
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp)
             )
+        }
+        if (task.status != TaskStatus.COMPLETED) {
+            TextButton(
+                onClick = onMarkCompletedClick,
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text("Отметить выполненной")
+            }
         }
     }
 }

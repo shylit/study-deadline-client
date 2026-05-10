@@ -13,11 +13,13 @@ import ru.mirea.shylit.studydeadline.domain.usecases.tasks.GetTasksUseCase
 import ru.mirea.shylit.studydeadline.domain.usecases.tasks.RefreshTasksUseCase
 import java.time.LocalDate
 import javax.inject.Inject
+import ru.mirea.shylit.studydeadline.domain.usecases.tasks.UpdateTaskStatusUseCase
 
 @HiltViewModel
 class TodayViewModel @Inject constructor(
     getTasksUseCase: GetTasksUseCase,
-    private val refreshTasksUseCase: RefreshTasksUseCase
+    private val refreshTasksUseCase: RefreshTasksUseCase,
+    private val updateTaskStatusUseCase: UpdateTaskStatusUseCase
 ) : ViewModel() {
 
     private val localState = MutableStateFlow(TodayUiState())
@@ -27,7 +29,7 @@ class TodayViewModel @Inject constructor(
         getTasksUseCase()
     ) { state, tasks ->
         val today = LocalDate.now()
-        val activeTasks = tasks.filter { it.status != TaskStatus.DONE }
+        val activeTasks = tasks.filter { it.status != TaskStatus.COMPLETED }
 
         state.copy(
             todayTasks = activeTasks.filter { task ->
@@ -71,6 +73,17 @@ class TodayViewModel @Inject constructor(
             }
 
             localState.value = localState.value.copy(isLoading = false)
+        }
+    }
+
+    fun markTaskCompleted(taskId: String) {
+        viewModelScope.launch {
+            updateTaskStatusUseCase(
+                id = taskId,
+                status = TaskStatus.COMPLETED
+            )
+
+            refreshTodayTasks()
         }
     }
 }

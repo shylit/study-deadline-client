@@ -43,9 +43,13 @@ private fun String.toTaskPriority(): TaskPriority {
 }
 
 private fun String.toTaskStatus(): TaskStatus {
-    return runCatching {
-        TaskStatus.valueOf(this)
-    }.getOrDefault(TaskStatus.PLANNED)
+    return when (this) {
+        "PLANNED" -> TaskStatus.PLANNED
+        "IN_PROGRESS" -> TaskStatus.IN_PROGRESS
+        "COMPLETED", "DONE" -> TaskStatus.COMPLETED
+        "OVERDUE" -> TaskStatus.OVERDUE
+        else -> TaskStatus.PLANNED
+    }
 }
 
 fun TaskEntity.toDomain(): StudyTask {

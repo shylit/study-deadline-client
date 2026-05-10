@@ -31,7 +31,7 @@ class WeekViewModel @Inject constructor(
         val startOfWeek = today.with(DayOfWeek.MONDAY)
         val endOfWeek = today.with(DayOfWeek.SUNDAY)
 
-        val activeTasks = tasks.filter { it.status != TaskStatus.DONE }
+        val activeTasks = tasks.filter { it.status != TaskStatus.COMPLETED }
 
         val weekTasks = activeTasks.filter { task ->
             task.deadline?.let { deadline ->
