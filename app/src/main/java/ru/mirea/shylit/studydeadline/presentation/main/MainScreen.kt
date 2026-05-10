@@ -19,6 +19,7 @@ import ru.mirea.shylit.studydeadline.presentation.subjects.SubjectsScreen
 import ru.mirea.shylit.studydeadline.presentation.tasks.SubjectTasksScreen
 import ru.mirea.shylit.studydeadline.presentation.today.TodayScreen
 import ru.mirea.shylit.studydeadline.presentation.week.WeekScreen
+import ru.mirea.shylit.studydeadline.presentation.tasks.create.CreateTaskScreen
 
 @Composable
 fun MainScreen(
@@ -83,8 +84,24 @@ fun MainScreen(
             startDestination = Screen.Today.route,
             modifier = Modifier.padding(paddingValues)
         ) {
+
+            composable("create_task") {
+                CreateTaskScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onTaskCreated = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
             composable(Screen.Today.route) {
-                TodayScreen()
+                TodayScreen(
+                    onCreateTaskClick = {
+                        navController.navigate("create_task")
+                    }
+                )
             }
 
             composable(Screen.Week.route) {

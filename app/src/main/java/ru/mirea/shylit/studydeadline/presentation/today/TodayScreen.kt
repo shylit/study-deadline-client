@@ -10,7 +10,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -24,101 +26,118 @@ import ru.mirea.shylit.studydeadline.domain.models.StudyTask
 
 @Composable
 fun TodayScreen(
+    onCreateTaskClick: () -> Unit,
     viewModel: TodayViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    when {
-        uiState.isLoading &&
-                uiState.todayTasks.isEmpty() &&
-                uiState.overdueTasks.isEmpty() -> {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onCreateTaskClick
             ) {
-                CircularProgressIndicator()
-                Text(
-                    text = "Загрузка задач...",
-                    modifier = Modifier.padding(top = 12.dp)
-                )
+                Text("+")
             }
         }
-
-        uiState.errorMessage != null &&
-                uiState.todayTasks.isEmpty() &&
-                uiState.overdueTasks.isEmpty() -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = uiState.errorMessage ?: "Не удалось загрузить задачи",
-                    color = MaterialTheme.colorScheme.error
-                )
-
-                TextButton(
-                    onClick = viewModel::refreshTodayTasks,
-                    modifier = Modifier.padding(top = 8.dp)
+    ) { paddingValues ->
+        when {
+            uiState.isLoading &&
+                    uiState.todayTasks.isEmpty() &&
+                    uiState.overdueTasks.isEmpty() -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Text("Обновить")
+                    CircularProgressIndicator()
+                    Text(
+                        text = "Загрузка задач...",
+                        modifier = Modifier.padding(top = 12.dp)
+                    )
                 }
             }
-        }
 
-        uiState.todayTasks.isEmpty() && uiState.overdueTasks.isEmpty() -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "На сегодня задач нет",
-                    style = MaterialTheme.typography.titleLarge
-                )
-                Text(
-                    text = "Добавьте задачи в разделе «Предметы»",
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
-        }
+            uiState.errorMessage != null &&
+                    uiState.todayTasks.isEmpty() &&
+                    uiState.overdueTasks.isEmpty() -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = uiState.errorMessage ?: "Не удалось загрузить задачи",
+                        color = MaterialTheme.colorScheme.error
+                    )
 
-        else -> {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                if (uiState.overdueTasks.isNotEmpty()) {
-                    item {
-                        Text(
-                            text = "Просрочено",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
-
-                    items(uiState.overdueTasks) { task ->
-                        TodayTaskCard(task = task)
+                    TextButton(
+                        onClick = viewModel::refreshTodayTasks,
+                        modifier = Modifier.padding(top = 8.dp)
+                    ) {
+                        Text("Обновить")
                     }
                 }
+            }
 
-                if (uiState.todayTasks.isNotEmpty()) {
-                    item {
-                        Text(
-                            text = "Сегодня",
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.padding(top = 12.dp)
-                        )
+            uiState.todayTasks.isEmpty() && uiState.overdueTasks.isEmpty() -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "На сегодня задач нет",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = "Нажмите «+», чтобы добавить задачу",
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+            }
+
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    if (uiState.overdueTasks.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = "Просрочено",
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+
+                        items(uiState.overdueTasks) { task ->
+                            TodayTaskCard(task = task)
+                        }
                     }
 
-                    items(uiState.todayTasks) { task ->
-                        TodayTaskCard(task = task)
+                    if (uiState.todayTasks.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = "Сегодня",
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.padding(top = 12.dp)
+                            )
+                        }
+
+                        items(uiState.todayTasks) { task ->
+                            TodayTaskCard(task = task)
+                        }
                     }
                 }
             }

@@ -28,11 +28,11 @@ fun TaskStatus.toApiValue(): String = name
 
 private fun String.toTaskType(): TaskType {
     return when (this) {
-        "LAB" -> TaskType.LAB
         "HOMEWORK" -> TaskType.HOMEWORK
-        "PRACTICE" -> TaskType.PRACTICE
-        "COURSE_WORK", "COURSEWORK" -> TaskType.COURSEWORK
+        "LAB_WORK", "LAB" -> TaskType.LAB_WORK
+        "COURSE_WORK", "COURSEWORK" -> TaskType.COURSE_WORK
         "EXAM" -> TaskType.EXAM
+        "TEST" -> TaskType.TEST
         else -> TaskType.OTHER
     }
 }

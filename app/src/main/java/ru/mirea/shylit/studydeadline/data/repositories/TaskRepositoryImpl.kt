@@ -40,24 +40,22 @@ class TaskRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createTask(
-        subjectId: String,
         title: String,
-        description: String?,
-        deadline: String?,
-        type: TaskType,
+        description: String,
+        subject: String,
+        deadline: String,
         priority: TaskPriority,
-        status: TaskStatus
+        type: TaskType
     ): Result<StudyTask> {
         return runCatching {
             val task = taskApi.createTask(
                 CreateTaskRequest(
-                    subjectId = subjectId,
                     title = title,
                     description = description,
+                    subject = subject,
                     deadline = deadline,
-                    type = type.toApiValue(),
                     priority = priority.toApiValue(),
-                    status = status.toApiValue()
+                    type = type.toApiValue()
                 )
             ).toDomain()
 

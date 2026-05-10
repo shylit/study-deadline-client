@@ -1,10 +1,10 @@
 package ru.mirea.shylit.studydeadline.domain.models
 
 enum class TaskType {
-    LAB,
     HOMEWORK,
-    PRACTICE,
-    COURSEWORK,
+    LAB_WORK,
+    COURSE_WORK,
     EXAM,
+    TEST,
     OTHER
 }
