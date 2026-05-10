@@ -66,25 +66,25 @@ class TaskRepositoryImpl @Inject constructor(
 
     override suspend fun updateTask(
         id: String,
-        subjectId: String,
         title: String,
-        description: String?,
-        deadline: String?,
-        type: TaskType,
+        description: String,
+        subject: String,
+        deadline: String,
+        status: TaskStatus,
         priority: TaskPriority,
-        status: TaskStatus
+        type: TaskType
     ): Result<StudyTask> {
         return runCatching {
             val task = taskApi.updateTask(
                 id = id,
                 request = UpdateTaskRequest(
-                    subjectId = subjectId,
                     title = title,
                     description = description,
+                    subject = subject,
                     deadline = deadline,
-                    type = type.toApiValue(),
+                    status = status.toApiValue(),
                     priority = priority.toApiValue(),
-                    status = status.toApiValue()
+                    type = type.toApiValue()
                 )
             ).toDomain()
 
@@ -139,5 +139,9 @@ class TaskRepositoryImpl @Inject constructor(
             .map { it.toDomain() }
 
         taskDao.insertTasks(remoteTasks.map { it.toEntity() })
+    }
+
+    override suspend fun getTaskById(id: String): StudyTask? {
+        return taskDao.getTaskById(id)?.toDomain()
     }
 }

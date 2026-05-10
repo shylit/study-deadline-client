@@ -20,6 +20,7 @@ import ru.mirea.shylit.studydeadline.presentation.tasks.SubjectTasksScreen
 import ru.mirea.shylit.studydeadline.presentation.today.TodayScreen
 import ru.mirea.shylit.studydeadline.presentation.week.WeekScreen
 import ru.mirea.shylit.studydeadline.presentation.tasks.create.CreateTaskScreen
+import ru.mirea.shylit.studydeadline.presentation.tasks.edit.EditTaskScreen
 
 @Composable
 fun MainScreen(
@@ -100,6 +101,9 @@ fun MainScreen(
                 TodayScreen(
                     onCreateTaskClick = {
                         navController.navigate("create_task")
+                    },
+                    onEditTaskClick = { taskId ->
+                        navController.navigate("edit_task/$taskId")
                     }
                 )
             }
@@ -136,6 +140,22 @@ fun MainScreen(
             composable(Screen.Settings.route) {
                 SettingsScreen(
                     onLogoutClick = onLogoutClick
+                )
+            }
+
+            composable("edit_task/{taskId}") { backStackEntry ->
+                val taskId = backStackEntry.arguments
+                    ?.getString("taskId")
+                    .orEmpty()
+
+                EditTaskScreen(
+                    taskId = taskId,
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onTaskUpdated = {
+                        navController.popBackStack()
+                    }
                 )
             }
         }

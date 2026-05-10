@@ -25,13 +25,13 @@ interface TaskRepository {
 
     suspend fun updateTask(
         id: String,
-        subjectId: String,
         title: String,
-        description: String?,
-        deadline: String?,
-        type: TaskType,
+        description: String,
+        subject: String,
+        deadline: String,
+        status: TaskStatus,
         priority: TaskPriority,
-        status: TaskStatus
+        type: TaskType
     ): Result<StudyTask>
 
     suspend fun updateTaskStatus(
@@ -46,4 +46,6 @@ interface TaskRepository {
     suspend fun refreshTodayTasks()
 
     suspend fun refreshTasksBySubject(subjectName: String)
+
+    suspend fun getTaskById(id: String): StudyTask?
 }

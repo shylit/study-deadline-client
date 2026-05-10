@@ -28,6 +28,7 @@ import ru.mirea.shylit.studydeadline.domain.models.TaskStatus
 @Composable
 fun TodayScreen(
     onCreateTaskClick: () -> Unit,
+    onEditTaskClick: (String) -> Unit,
     viewModel: TodayViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -130,6 +131,9 @@ fun TodayScreen(
                                 },
                                 onDeleteClick = {
                                     viewModel.deleteTask(task.id)
+                                },
+                                onEditClick = {
+                                    onEditTaskClick(task.id)
                                 }
                             )
                         }
@@ -152,6 +156,9 @@ fun TodayScreen(
                                 },
                                 onDeleteClick = {
                                     viewModel.deleteTask(task.id)
+                                },
+                                onEditClick = {
+                                    onEditTaskClick(task.id)
                                 }
                             )
                         }
@@ -166,7 +173,8 @@ fun TodayScreen(
 private fun TodayTaskCard(
     task: StudyTask,
     onMarkCompletedClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onEditClick: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -224,6 +232,12 @@ private fun TodayTaskCard(
             modifier = Modifier.padding(top = 4.dp)
         ) {
             Text("Удалить")
+        }
+        TextButton(
+            onClick = onEditClick,
+            modifier = Modifier.padding(top = 4.dp)
+        ) {
+            Text("Редактировать")
         }
     }
 }
