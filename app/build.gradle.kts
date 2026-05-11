@@ -91,4 +91,6 @@ dependencies {
     implementation(libs.firebase.auth)
 
     implementation(libs.play.services.tasks)
+
+    implementation(libs.androidx.compose.material.icons.extended)
 }

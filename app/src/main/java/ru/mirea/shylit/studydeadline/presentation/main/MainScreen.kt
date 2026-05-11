@@ -21,6 +21,13 @@ import ru.mirea.shylit.studydeadline.presentation.today.TodayScreen
 import ru.mirea.shylit.studydeadline.presentation.week.WeekScreen
 import ru.mirea.shylit.studydeadline.presentation.tasks.create.CreateTaskScreen
 import ru.mirea.shylit.studydeadline.presentation.tasks.edit.EditTaskScreen
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.School
+import androidx.compose.material3.Icon
 
 @Composable
 fun MainScreen(
@@ -64,15 +71,16 @@ fun MainScreen(
                             )
                         },
                         icon = {
-                            Text(
-                                when (screen) {
-                                    Screen.Today -> "Д"
-                                    Screen.Week -> "Н"
-                                    Screen.Subjects -> "П"
-                                    Screen.Search -> "?"
-                                    Screen.Settings -> "⚙"
-                                    else -> ""
-                                }
+                            Icon(
+                                imageVector = when (screen) {
+                                    Screen.Today -> Icons.Default.CheckCircle
+                                    Screen.Week -> Icons.Default.CalendarMonth
+                                    Screen.Subjects -> Icons.Default.School
+                                    Screen.Search -> Icons.Default.Search
+                                    Screen.Settings -> Icons.Default.Settings
+                                    else -> Icons.Default.CheckCircle
+                                },
+                                contentDescription = null
                             )
                         }
                     )
