@@ -191,21 +191,21 @@ private fun TodayTaskCard(
             Text(
                 text = "Предмет: ${task.subjectId}",
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier.padding(top = 6.dp)
             )
 
-            task.description?.let {
+            task.description?.takeIf { it.isNotBlank() }?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = 6.dp)
                 )
             }
 
             Text(
                 text = "Дедлайн: ${task.deadline ?: "без даты"}",
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 10.dp)
             )
 
             Text(
@@ -219,26 +219,33 @@ private fun TodayTaskCard(
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp)
             )
-        }
-        if (task.status != TaskStatus.COMPLETED) {
-            TextButton(
-                onClick = onMarkCompletedClick,
-                modifier = Modifier.padding(top = 8.dp)
-            ) {
-                Text("Отметить выполненной")
+
+            Text(
+                text = "Тип: ${task.type.toRuLabel()}",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+
+            if (task.status != TaskStatus.COMPLETED) {
+                TextButton(
+                    onClick = onMarkCompletedClick,
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
+                    Text("Отметить выполненной")
+                }
             }
-        }
-        TextButton(
-            onClick = onDeleteClick,
-            modifier = Modifier.padding(top = 4.dp)
-        ) {
-            Text("Удалить")
-        }
-        TextButton(
-            onClick = onEditClick,
-            modifier = Modifier.padding(top = 4.dp)
-        ) {
-            Text("Редактировать")
+
+            TextButton(
+                onClick = onEditClick
+            ) {
+                Text("Редактировать")
+            }
+
+            TextButton(
+                onClick = onDeleteClick
+            ) {
+                Text("Удалить")
+            }
         }
     }
 }
