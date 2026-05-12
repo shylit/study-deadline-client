@@ -10,11 +10,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,10 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.mirea.shylit.studydeadline.core.ui.toRuLabel
 import ru.mirea.shylit.studydeadline.domain.models.StudyTask
 import ru.mirea.shylit.studydeadline.domain.models.TaskStatus
-import ru.mirea.shylit.studydeadline.core.ui.toRuLabel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodayScreen(
     onCreateTaskClick: () -> Unit,
@@ -35,6 +38,13 @@ fun TodayScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Сегодня")
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onCreateTaskClick

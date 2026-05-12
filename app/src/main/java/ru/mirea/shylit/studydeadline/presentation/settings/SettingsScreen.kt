@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -19,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     onLogoutClick: () -> Unit,
@@ -33,42 +37,50 @@ fun SettingsScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Top
-    ) {
-        Text(
-            text = "Настройки",
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Тёмная тема",
-                style = MaterialTheme.typography.bodyLarge
-            )
-
-            Switch(
-                checked = isDarkTheme,
-                onCheckedChange = themeViewModel::setDarkTheme
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Настройки")
+                }
             )
         }
+    ) { paddingValues ->
 
-        Button(
-            onClick = viewModel::logout,
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp)
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Top
         ) {
-            Text("Выйти из аккаунта")
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Тёмная тема",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Switch(
+                    checked = isDarkTheme,
+                    onCheckedChange = themeViewModel::setDarkTheme
+                )
+            }
+
+            Button(
+                onClick = viewModel::logout,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp)
+            ) {
+                Text("Выйти из аккаунта")
+            }
         }
     }
 }

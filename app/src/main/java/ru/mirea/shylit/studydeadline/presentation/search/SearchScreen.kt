@@ -13,10 +13,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,8 +28,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mirea.shylit.studydeadline.domain.models.StudyTask
-import ru.mirea.shylit.studydeadline.core.ui.toRuLabel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel()
@@ -34,96 +37,100 @@ fun SearchScreen(
     val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "Поиск",
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        OutlinedTextField(
-            value = uiState.query,
-            onValueChange = viewModel::onQueryChange,
-            label = {
-                Text("Введите название задания")
-            },
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Поиск")
+                }
+            )
+        }
+    ) { paddingValues ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            singleLine = true,
-            trailingIcon = {
-                if (uiState.query.isNotBlank()) {
-                    TextButton(
-                        onClick = {
-                            viewModel.clearQuery()
-                            focusManager.clearFocus()
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+        ) {
+            OutlinedTextField(
+                value = uiState.query,
+                onValueChange = viewModel::onQueryChange,
+                label = {
+                    Text("Введите название задания")
+                },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                trailingIcon = {
+                    if (uiState.query.isNotBlank()) {
+                        TextButton(
+                            onClick = {
+                                viewModel.clearQuery()
+                                focusManager.clearFocus()
+                            }
+                        ) {
+                            Text("Очистить")
                         }
-                    ) {
-                        Text("Очистить")
                     }
                 }
-            }
-        )
+            )
 
-        Button(
-            onClick = {
-                focusManager.clearFocus()
-                viewModel.search()
-            },
-            enabled = uiState.query.isNotBlank() && !uiState.isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp)
-        ) {
-            Text("Найти")
-        }
-
-        when {
-            uiState.isLoading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier.padding(top = 24.dp)
-                )
+            Button(
+                onClick = {
+                    focusManager.clearFocus()
+                    viewModel.search()
+                },
+                enabled = uiState.query.isNotBlank() && !uiState.isLoading,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp)
+            ) {
+                Text("Найти")
             }
 
-            uiState.errorMessage != null -> {
-                Text(
-                    text = uiState.errorMessage ?: "Ошибка поиска",
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(top = 24.dp)
-                )
-
-                TextButton(
-                    onClick = viewModel::repeatSearch
-                ) {
-                    Text("Обновить")
+            when {
+                uiState.isLoading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(top = 24.dp)
+                    )
                 }
-            }
 
-            uiState.results.isNotEmpty() -> {
-                SearchResults(
-                    results = uiState.results,
-                    onResultClick = viewModel::addCurrentQueryToHistory,
-                    modifier = Modifier.padding(top = 16.dp)
-                )
-            }
+                uiState.errorMessage != null -> {
+                    Text(
+                        text = uiState.errorMessage ?: "Ошибка поиска",
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(top = 24.dp)
+                    )
 
-            uiState.hasSearched -> {
-                Text(
-                    text = "Ничего не найдено",
-                    modifier = Modifier.padding(top = 24.dp)
-                )
-            }
+                    TextButton(
+                        onClick = viewModel::repeatSearch
+                    ) {
+                        Text("Обновить")
+                    }
+                }
 
-            uiState.history.isNotEmpty() -> {
-                SearchHistory(
-                    history = uiState.history,
-                    onHistoryClick = viewModel::onHistoryClick,
-                    onClearHistoryClick = viewModel::clearHistory,
-                    modifier = Modifier.padding(top = 24.dp)
-                )
+                uiState.results.isNotEmpty() -> {
+                    SearchResults(
+                        results = uiState.results,
+                        onResultClick = viewModel::addCurrentQueryToHistory,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+                }
+
+                uiState.hasSearched -> {
+                    Text(
+                        text = "Ничего не найдено",
+                        modifier = Modifier.padding(top = 24.dp)
+                    )
+                }
+
+                uiState.history.isNotEmpty() -> {
+                    SearchHistory(
+                        history = uiState.history,
+                        onHistoryClick = viewModel::onHistoryClick,
+                        onClearHistoryClick = viewModel::clearHistory,
+                        modifier = Modifier.padding(top = 24.dp)
+                    )
+                }
             }
         }
     }
@@ -215,7 +222,7 @@ private fun SearchTaskCard(
                 modifier = Modifier.padding(top = 4.dp)
             )
 
-            task.description?.let {
+            task.description?.takeIf { it.isNotBlank() }?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodyMedium,
