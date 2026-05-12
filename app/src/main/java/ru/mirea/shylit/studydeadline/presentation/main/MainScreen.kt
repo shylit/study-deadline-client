@@ -117,7 +117,11 @@ fun MainScreen(
             }
 
             composable(Screen.Week.route) {
-                WeekScreen()
+                WeekScreen(
+                    onEditTaskClick = { taskId ->
+                        navController.navigate("edit_task/$taskId")
+                    }
+                )
             }
 
             composable(Screen.Subjects.route) {

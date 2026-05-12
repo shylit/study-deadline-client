@@ -30,7 +30,11 @@ import ru.mirea.shylit.studydeadline.domain.models.TaskStatus
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeekScreen(
+
+    onEditTaskClick: (String) -> Unit,
+
     viewModel: WeekViewModel = hiltViewModel()
+
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -132,6 +136,11 @@ fun WeekScreen(
                                 },
                                 onDeleteClick = {
                                     viewModel.deleteTask(task.id)
+                                },
+                                onEditClick = {
+
+                                    onEditTaskClick(task.id)
+
                                 }
                             )
                         }
@@ -154,6 +163,11 @@ fun WeekScreen(
                                 },
                                 onDeleteClick = {
                                     viewModel.deleteTask(task.id)
+                                },
+                                onEditClick = {
+
+                                    onEditTaskClick(task.id)
+
                                 }
                             )
                         }
@@ -166,9 +180,15 @@ fun WeekScreen(
 
 @Composable
 private fun WeekTaskCard(
+
     task: StudyTask,
+
     onMarkCompletedClick: () -> Unit,
-    onDeleteClick: () -> Unit
+
+    onDeleteClick: () -> Unit,
+
+    onEditClick: () -> Unit
+
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -226,6 +246,16 @@ private fun WeekTaskCard(
                 ) {
                     Text("Отметить выполненной")
                 }
+            }
+
+            TextButton(
+
+                onClick = onEditClick
+
+            ) {
+
+                Text("Редактировать")
+
             }
 
             TextButton(
