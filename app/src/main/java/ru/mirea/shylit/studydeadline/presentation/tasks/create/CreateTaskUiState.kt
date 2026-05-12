@@ -2,6 +2,7 @@ package ru.mirea.shylit.studydeadline.presentation.tasks.create
 
 import ru.mirea.shylit.studydeadline.domain.models.TaskPriority
 import ru.mirea.shylit.studydeadline.domain.models.TaskType
+import ru.mirea.shylit.studydeadline.domain.models.Subject
 
 data class CreateTaskUiState(
     val title: String = "",
@@ -12,5 +13,7 @@ data class CreateTaskUiState(
     val type: TaskType = TaskType.OTHER,
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val isSuccess: Boolean = false
+    val isSuccess: Boolean = false,
+    val subjects: List<Subject> = emptyList(),
+    val isSubjectMenuExpanded: Boolean = false
 )

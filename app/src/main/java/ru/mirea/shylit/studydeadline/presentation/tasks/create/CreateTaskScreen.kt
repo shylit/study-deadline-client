@@ -9,6 +9,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -20,9 +22,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.mirea.shylit.studydeadline.core.ui.toRuLabel
 import ru.mirea.shylit.studydeadline.domain.models.TaskPriority
 import ru.mirea.shylit.studydeadline.domain.models.TaskType
-import ru.mirea.shylit.studydeadline.core.ui.toRuLabel
 
 @Composable
 fun CreateTaskScreen(
@@ -85,6 +87,35 @@ fun CreateTaskScreen(
                 .padding(top = 12.dp),
             singleLine = true
         )
+
+        TextButton(
+            onClick = viewModel::showSubjectMenu,
+            modifier = Modifier.padding(top = 4.dp)
+        ) {
+            Text("Выбрать из списка")
+        }
+
+        DropdownMenu(
+            expanded = uiState.isSubjectMenuExpanded,
+            onDismissRequest = viewModel::hideSubjectMenu,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            if (uiState.subjects.isEmpty()) {
+                DropdownMenuItem(
+                    text = { Text("Сначала добавьте предмет") },
+                    onClick = viewModel::hideSubjectMenu
+                )
+            } else {
+                uiState.subjects.forEach { subject ->
+                    DropdownMenuItem(
+                        text = { Text(subject.name) },
+                        onClick = {
+                            viewModel.selectSubject(subject.name)
+                        }
+                    )
+                }
+            }
+        }
 
         OutlinedTextField(
             value = uiState.deadline,

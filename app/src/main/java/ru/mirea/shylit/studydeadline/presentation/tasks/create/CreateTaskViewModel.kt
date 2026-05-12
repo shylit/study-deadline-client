@@ -8,16 +8,26 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.mirea.shylit.studydeadline.domain.models.TaskPriority
 import ru.mirea.shylit.studydeadline.domain.models.TaskType
+import ru.mirea.shylit.studydeadline.domain.usecases.subjects.GetSubjectsUseCase
 import ru.mirea.shylit.studydeadline.domain.usecases.tasks.CreateTaskUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateTaskViewModel @Inject constructor(
-    private val createTaskUseCase: CreateTaskUseCase
+    private val createTaskUseCase: CreateTaskUseCase,
+    getSubjectsUseCase: GetSubjectsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateTaskUiState())
     val uiState = _uiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            getSubjectsUseCase().collect { subjects ->
+                _uiState.value = _uiState.value.copy(subjects = subjects)
+            }
+        }
+    }
 
     fun onTitleChange(value: String) {
         _uiState.value = _uiState.value.copy(title = value, errorMessage = null)
@@ -29,6 +39,22 @@ class CreateTaskViewModel @Inject constructor(
 
     fun onSubjectChange(value: String) {
         _uiState.value = _uiState.value.copy(subject = value, errorMessage = null)
+    }
+
+    fun showSubjectMenu() {
+        _uiState.value = _uiState.value.copy(isSubjectMenuExpanded = true)
+    }
+
+    fun hideSubjectMenu() {
+        _uiState.value = _uiState.value.copy(isSubjectMenuExpanded = false)
+    }
+
+    fun selectSubject(subjectName: String) {
+        _uiState.value = _uiState.value.copy(
+            subject = subjectName,
+            isSubjectMenuExpanded = false,
+            errorMessage = null
+        )
     }
 
     fun onDeadlineChange(value: String) {
@@ -52,7 +78,7 @@ class CreateTaskViewModel @Inject constructor(
         }
 
         if (state.subject.isBlank()) {
-            _uiState.value = state.copy(errorMessage = "Введите предмет")
+            _uiState.value = state.copy(errorMessage = "Выберите предмет")
             return
         }
 
