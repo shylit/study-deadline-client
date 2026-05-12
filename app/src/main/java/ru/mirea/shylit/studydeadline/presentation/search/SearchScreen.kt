@@ -32,6 +32,7 @@ import ru.mirea.shylit.studydeadline.domain.models.StudyTask
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
+    onEditTaskClick: (String) -> Unit,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -112,6 +113,9 @@ fun SearchScreen(
                     SearchResults(
                         results = uiState.results,
                         onResultClick = viewModel::addCurrentQueryToHistory,
+                        onEditClick = { taskId ->
+                            onEditTaskClick(taskId)
+                        },
                         modifier = Modifier.padding(top = 16.dp)
                     )
                 }
@@ -180,6 +184,7 @@ private fun SearchHistory(
 private fun SearchResults(
     results: List<StudyTask>,
     onResultClick: () -> Unit,
+    onEditClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -189,8 +194,17 @@ private fun SearchResults(
     ) {
         items(results) { task ->
             SearchTaskCard(
+
                 task = task,
-                onClick = onResultClick
+
+                onClick = onResultClick,
+
+                onEditClick = {
+
+                    onEditClick(task.id)
+
+                }
+
             )
         }
     }
@@ -199,7 +213,8 @@ private fun SearchResults(
 @Composable
 private fun SearchTaskCard(
     task: StudyTask,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onEditClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -235,6 +250,13 @@ private fun SearchTaskCard(
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 8.dp)
             )
+
+            TextButton(
+                onClick = onEditClick,
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text("Редактировать")
+            }
         }
     }
 }

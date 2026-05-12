@@ -149,7 +149,11 @@ fun MainScreen(
             }
 
             composable(Screen.Search.route) {
-                SearchScreen()
+                SearchScreen(
+                    onEditTaskClick = { taskId ->
+                        navController.navigate("edit_task/$taskId")
+                    }
+                )
             }
 
             composable(Screen.Settings.route) {
