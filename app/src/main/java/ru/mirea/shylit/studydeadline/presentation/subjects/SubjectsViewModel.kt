@@ -12,12 +12,17 @@ import ru.mirea.shylit.studydeadline.domain.usecases.subjects.CreateSubjectUseCa
 import ru.mirea.shylit.studydeadline.domain.usecases.subjects.GetSubjectsUseCase
 import ru.mirea.shylit.studydeadline.domain.usecases.subjects.RefreshSubjectsUseCase
 import javax.inject.Inject
+import ru.mirea.shylit.studydeadline.domain.models.Subject
+import ru.mirea.shylit.studydeadline.domain.usecases.subjects.UpdateSubjectUseCase
+import ru.mirea.shylit.studydeadline.domain.usecases.subjects.DeleteSubjectUseCase
 
 @HiltViewModel
 class SubjectsViewModel @Inject constructor(
     getSubjectsUseCase: GetSubjectsUseCase,
     private val refreshSubjectsUseCase: RefreshSubjectsUseCase,
-    private val createSubjectUseCase: CreateSubjectUseCase
+    private val createSubjectUseCase: CreateSubjectUseCase,
+    private val updateSubjectUseCase: UpdateSubjectUseCase,
+    private val deleteSubjectUseCase: DeleteSubjectUseCase
 ) : ViewModel() {
 
     private val localState = MutableStateFlow(SubjectsUiState())
@@ -101,6 +106,74 @@ class SubjectsViewModel @Inject constructor(
                     localState.value = localState.value.copy(
                         isLoading = false,
                         errorMessage = error.message ?: "Не удалось создать предмет"
+                    )
+                }
+        }
+    }
+
+    fun onSubjectDescriptionChange(value: String) {
+        localState.value = localState.value.copy(subjectDescription = value)
+    }
+
+    fun showEditDialog(subject: Subject) {
+        localState.value = localState.value.copy(
+            editingSubject = subject,
+            subjectName = subject.name,
+            subjectDescription = "",
+            errorMessage = null
+        )
+    }
+
+    fun hideEditDialog() {
+        localState.value = localState.value.copy(
+            editingSubject = null,
+            subjectName = "",
+            subjectDescription = ""
+        )
+    }
+
+    fun updateSubject() {
+        val subject = uiState.value.editingSubject ?: return
+        val name = uiState.value.subjectName.trim()
+        val description = uiState.value.subjectDescription.trim()
+
+        if (name.isBlank()) {
+            localState.value = localState.value.copy(
+                errorMessage = "Введите название предмета"
+            )
+            return
+        }
+
+        viewModelScope.launch {
+            localState.value = localState.value.copy(isLoading = true)
+
+            updateSubjectUseCase(
+                id = subject.id,
+                name = name,
+                description = description.ifBlank { "Описание отсутствует" }
+            ).onSuccess {
+                localState.value = localState.value.copy(
+                    isLoading = false,
+                    editingSubject = null,
+                    subjectName = "",
+                    subjectDescription = "",
+                    errorMessage = null
+                )
+            }.onFailure { error ->
+                localState.value = localState.value.copy(
+                    isLoading = false,
+                    errorMessage = error.message ?: "Не удалось обновить предмет"
+                )
+            }
+        }
+    }
+
+    fun deleteSubject(subjectId: String) {
+        viewModelScope.launch {
+            deleteSubjectUseCase(subjectId)
+                .onFailure { error ->
+                    localState.value = localState.value.copy(
+                        errorMessage = error.message ?: "Не удалось удалить предмет"
                     )
                 }
         }

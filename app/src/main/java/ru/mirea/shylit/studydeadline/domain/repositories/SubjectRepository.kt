@@ -14,7 +14,7 @@ interface SubjectRepository {
     suspend fun updateSubject(
         id: String,
         name: String,
-        color: String? = null
+        description: String
     ): Result<Subject>
 
     suspend fun deleteSubject(id: String): Result<Unit>

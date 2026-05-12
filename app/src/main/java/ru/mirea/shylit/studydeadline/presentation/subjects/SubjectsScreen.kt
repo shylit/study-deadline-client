@@ -61,6 +61,10 @@ fun SubjectsScreen(
         SubjectsContent(
             uiState = uiState,
             onSubjectClick = onSubjectClick,
+            onEditClick = viewModel::showEditDialog,
+            onDeleteClick = { subject ->
+                viewModel.deleteSubject(subject.id)
+            },
             modifier = Modifier.padding(paddingValues)
         )
     }
@@ -73,12 +77,25 @@ fun SubjectsScreen(
             onConfirm = viewModel::createSubject
         )
     }
+
+    if (uiState.editingSubject != null) {
+        EditSubjectDialog(
+            subjectName = uiState.subjectName,
+            subjectDescription = uiState.subjectDescription,
+            onSubjectNameChange = viewModel::onSubjectNameChange,
+            onSubjectDescriptionChange = viewModel::onSubjectDescriptionChange,
+            onDismiss = viewModel::hideEditDialog,
+            onConfirm = viewModel::updateSubject
+        )
+    }
 }
 
 @Composable
 private fun SubjectsContent(
     uiState: SubjectsUiState,
     onSubjectClick: (String) -> Unit,
+    onEditClick: (Subject) -> Unit,
+    onDeleteClick: (Subject) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when {
@@ -126,6 +143,12 @@ private fun SubjectsContent(
                         subject = subject,
                         onClick = {
                             onSubjectClick(subject.name)
+                        },
+                        onEditClick = {
+                            onEditClick(subject)
+                        },
+                        onDeleteClick = {
+                            onDeleteClick(subject)
                         }
                     )
                 }
@@ -137,7 +160,9 @@ private fun SubjectsContent(
 @Composable
 private fun SubjectCard(
     subject: Subject,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -160,6 +185,19 @@ private fun SubjectCard(
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(top = 4.dp)
                 )
+            }
+
+            TextButton(
+                onClick = onEditClick,
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text("Редактировать")
+            }
+
+            TextButton(
+                onClick = onDeleteClick
+            ) {
+                Text("Удалить")
             }
         }
     }
@@ -193,6 +231,61 @@ private fun AddSubjectDialog(
                 onClick = onConfirm
             ) {
                 Text("Добавить")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss
+            ) {
+                Text("Отмена")
+            }
+        }
+    )
+}
+
+@Composable
+private fun EditSubjectDialog(
+    subjectName: String,
+    subjectDescription: String,
+    onSubjectNameChange: (String) -> Unit,
+    onSubjectDescriptionChange: (String) -> Unit,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text("Редактировать предмет")
+        },
+        text = {
+            Column {
+                OutlinedTextField(
+                    value = subjectName,
+                    onValueChange = onSubjectNameChange,
+                    label = {
+                        Text("Название предмета")
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                OutlinedTextField(
+                    value = subjectDescription,
+                    onValueChange = onSubjectDescriptionChange,
+                    label = {
+                        Text("Описание")
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onConfirm
+            ) {
+                Text("Сохранить")
             }
         },
         dismissButton = {

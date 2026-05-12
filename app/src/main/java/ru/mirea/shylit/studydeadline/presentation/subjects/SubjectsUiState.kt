@@ -7,5 +7,7 @@ data class SubjectsUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val subjectName: String = "",
-    val isAddDialogVisible: Boolean = false
+    val isAddDialogVisible: Boolean = false,
+    val editingSubject: Subject? = null,
+    val subjectDescription: String = ""
 )

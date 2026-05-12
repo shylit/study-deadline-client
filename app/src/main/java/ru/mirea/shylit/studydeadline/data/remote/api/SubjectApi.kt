@@ -9,6 +9,7 @@ import retrofit2.http.Path
 import ru.mirea.shylit.studydeadline.data.remote.dto.CreateSubjectRequest
 import ru.mirea.shylit.studydeadline.data.remote.dto.SubjectDto
 import ru.mirea.shylit.studydeadline.data.remote.dto.UpdateSubjectRequest
+import ru.mirea.shylit.studydeadline.data.remote.dto.MessageResponse
 
 interface SubjectApi {
 
@@ -29,5 +30,5 @@ interface SubjectApi {
     @DELETE("subjects/{id}")
     suspend fun deleteSubject(
         @Path("id") id: String
-    )
+    ): MessageResponse
 }

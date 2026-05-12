@@ -37,7 +37,7 @@ class SubjectRepositoryImpl @Inject constructor(
             val subject = subjectApi.createSubject(
                 CreateSubjectRequest(
                     name = name,
-                    color = color
+                    description = "Описание отсутствует"
                 )
             ).toDomain()
 
@@ -49,14 +49,14 @@ class SubjectRepositoryImpl @Inject constructor(
     override suspend fun updateSubject(
         id: String,
         name: String,
-        color: String?
+        description: String
     ): Result<Subject> {
         return runCatching {
             val subject = subjectApi.updateSubject(
                 id = id,
                 request = UpdateSubjectRequest(
                     name = name,
-                    color = color
+                    description = description
                 )
             ).toDomain()
 
@@ -67,8 +67,11 @@ class SubjectRepositoryImpl @Inject constructor(
 
     override suspend fun deleteSubject(id: String): Result<Unit> {
         return runCatching {
-            subjectApi.deleteSubject(id)
-            subjectDao.deleteSubject(id)
+            try {
+                subjectApi.deleteSubject(id)
+            } finally {
+                subjectDao.deleteSubject(id)
+            }
         }
     }
 }
