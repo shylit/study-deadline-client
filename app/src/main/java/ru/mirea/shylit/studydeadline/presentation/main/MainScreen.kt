@@ -141,6 +141,9 @@ fun MainScreen(
                     subjectName = subjectName,
                     onBackClick = {
                         navController.popBackStack()
+                    },
+                    onEditTaskClick = { taskId ->
+                        navController.navigate("edit_task/$taskId")
                     }
                 )
             }

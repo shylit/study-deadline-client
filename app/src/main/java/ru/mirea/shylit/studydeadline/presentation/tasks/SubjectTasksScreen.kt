@@ -28,9 +28,15 @@ import ru.mirea.shylit.studydeadline.core.ui.toRuLabel
 
 @Composable
 fun SubjectTasksScreen(
+
     subjectName: String,
+
     onBackClick: () -> Unit,
+
+    onEditTaskClick: (String) -> Unit,
+
     viewModel: SubjectTasksViewModel = hiltViewModel()
+
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -107,13 +113,27 @@ fun SubjectTasksScreen(
                 ) {
                     items(uiState.tasks) { task ->
                         SubjectTaskCard(
+
                             task = task,
+
                             onMarkCompletedClick = {
+
                                 viewModel.markTaskCompleted(task.id)
+
                             },
+
                             onDeleteClick = {
+
                                 viewModel.deleteTask(task.id)
+
+                            },
+
+                            onEditClick = {
+
+                                onEditTaskClick(task.id)
+
                             }
+
                         )
                     }
                 }
@@ -126,7 +146,8 @@ fun SubjectTasksScreen(
 private fun SubjectTaskCard(
     task: StudyTask,
     onMarkCompletedClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onEditClick: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -178,6 +199,12 @@ private fun SubjectTaskCard(
                 ) {
                     Text("Отметить выполненной")
                 }
+            }
+
+            TextButton(
+                onClick = onEditClick
+            ) {
+                Text("Редактировать")
             }
 
             TextButton(
