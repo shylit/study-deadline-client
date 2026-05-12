@@ -4,9 +4,15 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 import ru.mirea.shylit.studydeadline.domain.repositories.AuthRepository
 import javax.inject.Inject
+import ru.mirea.shylit.studydeadline.data.local.dao.SubjectDao
+import ru.mirea.shylit.studydeadline.data.local.dao.TaskDao
+import ru.mirea.shylit.studydeadline.data.local.dao.SearchHistoryDao
 
 class AuthRepositoryImpl @Inject constructor(
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val subjectDao: SubjectDao,
+    private val taskDao: TaskDao,
+    private val searchHistoryDao: SearchHistoryDao
 ) : AuthRepository {
 
     override fun isUserAuthorized(): Boolean {
@@ -47,7 +53,10 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun logout() {
+    override suspend fun logout() {
+        subjectDao.clearSubjects()
+        taskDao.clearTasks()
+        searchHistoryDao.clearHistory()
         firebaseAuth.signOut()
     }
 }

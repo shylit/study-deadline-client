@@ -16,5 +16,5 @@ interface AuthRepository {
 
     suspend fun getIdToken(): Result<String>
 
-    fun logout()
+    suspend fun logout()
 }

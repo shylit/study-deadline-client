@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,6 +26,12 @@ fun SettingsScreen(
     themeViewModel: ThemeViewModel = hiltViewModel()
 ) {
     val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.logoutEvent.collect {
+            onLogoutClick()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -56,10 +63,7 @@ fun SettingsScreen(
         }
 
         Button(
-            onClick = {
-                viewModel.logout()
-                onLogoutClick()
-            },
+            onClick = viewModel::logout,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp)
